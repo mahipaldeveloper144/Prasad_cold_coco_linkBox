@@ -11,7 +11,7 @@ $(document).ready(function() {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     
     body.attr('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
+    updateThemeContent(savedTheme);
 
     themeBtn.on('click', function() {
         const currentTheme = body.attr('data-theme');
@@ -19,12 +19,19 @@ $(document).ready(function() {
         
         body.attr('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
+        updateThemeContent(newTheme);
     });
 
-    function updateThemeIcon(theme) {
-        const icon = theme === 'dark' ? 'fa-sun' : 'fa-moon';
-        themeBtn.find('i').attr('class', `fas ${icon}`);
+    function updateThemeContent(theme) {
+        // Update Icon
+        const isDark = theme === 'dark';
+        const iconClass = isDark ? 'fa-sun sun-icon' : 'fa-moon moon-icon';
+        themeBtn.find('i').attr('class', `fas ${iconClass}`);
+
+        // Update Logo & Favicon
+        const logoPath = theme === 'dark' ? 'assets/Logo1.png' : 'assets/Logo2.png';
+        $('.profile-img').attr('src', logoPath);
+        $('link[rel="shortcut icon"]').attr('href', logoPath);
     }
 
     // 4. Ripple Effect
@@ -61,15 +68,31 @@ $(document).ready(function() {
     // 6. Lightbox Gallery
     const lightbox = $('#lightbox');
     const lightboxImg = lightbox.find('img');
+    const lightboxVideo = lightbox.find('video');
     
     $('.gallery-item').on('click', function() {
-        const imgSrc = $(this).find('img').attr('src');
-        lightboxImg.attr('src', imgSrc);
+        const img = $(this).find('img');
+        const video = $(this).find('video');
+        
+        if (img.length) {
+            lightboxImg.show().attr('src', img.attr('src'));
+            lightboxVideo.hide().attr('src', '');
+        } else if (video.length) {
+            lightboxVideo.show().attr('src', video.attr('src'));
+            lightboxImg.hide().attr('src', '');
+            lightboxVideo[0].play();
+        }
+
         lightbox.css('display', 'flex').hide().fadeIn();
     });
 
     lightbox.on('click', function() {
-        $(this).fadeOut();
+        lightbox.fadeOut(function() {
+            // Stop video if playing
+            lightboxVideo[0].pause();
+            lightboxVideo.attr('src', '');
+            lightboxImg.attr('src', '');
+        });
     });
 
     // 7. AOS Scroll Animations Initialization

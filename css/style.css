@@ -6,12 +6,14 @@
     /* Cream */
     --accent: #8B5E3C;
     --text-light: #ffffff;
+    --text-pure-light: #ffffff;
     --text-dark: #333333;
 
     /* Social Colors */
     --instagram: #E1306C;
     --whatsapp: #25D366;
     --youtube: #FF0000;
+    --facebook: #1877F2;
 
     /* Effects */
     --glass-bg: rgba(255, 255, 255, 0.1);
@@ -24,6 +26,25 @@
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(92, 58, 33, 0.2);
     --text-light: #5C3A21;
+}
+
+[data-theme="dark"] .profile-img {
+    border-color: var(--primary);
+}
+
+/* Light mode specific overrides */
+[data-theme="light"] .menu-icon {
+    color: var(--primary) !important;
+}
+
+[data-theme="light"] .offer-banner,
+[data-theme="light"] .offer-banner h3,
+[data-theme="light"] .offer-banner p,
+[data-theme="light"] .modal-content,
+[data-theme="light"] .modal-content h2,
+[data-theme="light"] .modal-content p,
+[data-theme="light"] .modal-close {
+    color: var(--text-pure-light) !important;
 }
 
 * {
@@ -86,6 +107,18 @@ body[data-theme="light"] {
     transform: rotate(30deg);
 }
 
+.sun-icon {
+    color: #FFD700;
+    /* Gold/Yellow */
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+}
+
+.moon-icon {
+    color: #A5A5FF;
+    /* Soft Indigo */
+    filter: drop-shadow(0 0 5px rgba(165, 165, 255, 0.5));
+}
+
 /* Profile Section */
 .profile {
     text-align: center;
@@ -107,6 +140,7 @@ body[data-theme="light"] {
     border: 4px solid var(--secondary);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     animation: floating 3s ease-in-out infinite;
+    transition: var(--transition);
 }
 
 @keyframes floating {
@@ -172,6 +206,11 @@ body[data-theme="light"] {
     text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
 
+.social-icon.facebook:hover {
+    color: var(--facebook);
+    text-shadow: 0 0 15px rgba(24, 119, 242, 0.5);
+}
+
 /* Link Section */
 .links-container {
     width: 100%;
@@ -195,8 +234,52 @@ body[data-theme="light"] {
     font-weight: 600;
     font-size: 1.1rem;
     box-shadow: var(--glass-shadow);
-    transition: var(--transition);
+    transition: var(--transition) !important;
     overflow: hidden;
+    z-index: 1;
+}
+
+.link-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 200%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 80' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C150,100 250,0 400,40 C550,80 650,0 800,40 L800,80 L0,80 Z' fill='%23F5E6CA' opacity='0.3'/%3E%3C/svg%3E");
+    background-size: 50% 30px;
+    background-position: bottom;
+    background-repeat: repeat-x;
+    animation: drink-wave 6s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+[data-theme="light"] .link-card::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 80' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C150,100 250,0 400,40 C550,80 650,0 800,40 L800,80 L0,80 Z' fill='%235C3A21' opacity='0.15'/%3E%3C/svg%3E");
+}
+
+@keyframes drink-wave {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+
+/* Desynchronize waves for better organic feel */
+.link-card:nth-child(even)::before {
+    animation-duration: 8s;
+    animation-delay: -2s;
+}
+
+
+
+.menu-icon {
+    color: var(--secondary);
 }
 
 .link-card i {
@@ -217,7 +300,12 @@ body[data-theme="light"] {
 .link-card:hover {
     transform: scale(1.03);
     background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 20px rgba(245, 230, 202, 0.3);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .link-card:hover {
+    background: rgba(92, 58, 33, 0.08);
+    box-shadow: 0 12px 24px rgba(92, 58, 33, 0.1);
 }
 
 .link-card span {
@@ -321,14 +409,20 @@ body[data-theme="light"] {
     cursor: pointer;
 }
 
-.gallery-item img {
+.gallery-item img,
+.gallery-item video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: var(--transition);
 }
 
-.gallery-item:hover img {
+.gallery-item:nth-child(3) img {
+    object-position: top center;
+}
+
+.gallery-item:hover img,
+.gallery-item:hover video {
     transform: scale(1.1);
 }
 
@@ -391,7 +485,8 @@ footer {
     justify-content: center;
 }
 
-#lightbox img {
+#lightbox img,
+#lightbox video {
     max-width: 90%;
     max-height: 80%;
     border-radius: 8px;
