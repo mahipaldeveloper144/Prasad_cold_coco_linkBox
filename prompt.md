@@ -1,3 +1,4 @@
+
 You are a senior frontend developer and UI/UX designer.
 
 Create a modern, mobile-first, production-ready Linktree-style website for a business named:
